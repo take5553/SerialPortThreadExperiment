@@ -13,10 +13,13 @@ namespace SerialPortThreadExperiment
 {
     public partial class Form1 : Form
     {
+        string InpTxt;
+
         public Form1()
         {
             InitializeComponent();
             ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
+            InpTxt = "";
         }
 
         private void BtnCommOpen_Click(object sender, EventArgs e)
@@ -25,11 +28,7 @@ namespace SerialPortThreadExperiment
 
             Comm1Open();
 
-            // シリアルポートが開く前用のコントロールを無効化
-            btnCommOpen.Enabled = false;
-
-            // シリアルポートが開いた後用のコントロールを有効化
-            btnCommClose.Enabled = true;
+            ActivationSwitcher(true);
         }
 
         private void Comm1Open()
@@ -60,11 +59,7 @@ namespace SerialPortThreadExperiment
 
             serialPort1.Close();
 
-            // シリアルポートが開く前用のコントロールを有効化
-            btnCommOpen.Enabled = true;
-
-            // シリアルポートが開いた後用のコントロールを無効化
-            btnCommClose.Enabled = false;
+            ActivationSwitcher(false);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -104,7 +99,8 @@ namespace SerialPortThreadExperiment
         {
             ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
             string data = serialPort1.ReadLine();
-            Response(data);
+            InpTxt = data;
+            //Response(data);
         }
 
         private void Response(string text)
@@ -122,6 +118,45 @@ namespace SerialPortThreadExperiment
         {
             int id = System.Threading.Thread.CurrentThread.ManagedThreadId;
             Console.WriteLine("ID : " + id + "(" + method + ")");
+        }
+
+        private void ActivationSwitcher(bool Activation)
+        {
+            // シリアルポートが開く前用のコントロールを無効化
+            btnCommOpen.Enabled = !Activation;
+
+            // シリアルポートが開いた後用のコントロールを有効化
+            btnCommClose.Enabled = Activation;
+            btnSendCR.Enabled = Activation;
+            btnCRAndWaitResponse.Enabled = Activation;
+        }
+
+        private void btnCRAndWaitResponse_Click(object sender, EventArgs e)
+        {
+            ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
+            SendCRAndWaitResponse();
+        }
+
+        private async void SendCRAndWaitResponse()
+        {
+            ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
+            int t = 200;
+            OutCmd("CR");
+            do
+            {
+                await Task.Delay(50);
+                t -= 1;
+            } while (t >= 0 && InpTxt == "");
+            if (t < 0)
+            {
+                Console.WriteLine("Failed Receiving: InpTxt = " + InpTxt + ", t = " + t);
+                ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
+                InpTxt = "";
+                return;
+            }
+            Console.WriteLine("Data Received: InpTxt = " + InpTxt + ", t = " + t);
+            ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
+            InpTxt = "";
         }
     }
 }

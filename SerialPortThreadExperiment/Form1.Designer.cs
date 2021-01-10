@@ -84,6 +84,7 @@ namespace SerialPortThreadExperiment
             // 
             // btnSendCR
             // 
+            this.btnSendCR.Enabled = false;
             this.btnSendCR.Location = new System.Drawing.Point(14, 47);
             this.btnSendCR.Name = "btnSendCR";
             this.btnSendCR.Size = new System.Drawing.Size(224, 23);
@@ -103,12 +104,14 @@ namespace SerialPortThreadExperiment
             // 
             // btnCRAndWaitResponse
             // 
+            this.btnCRAndWaitResponse.Enabled = false;
             this.btnCRAndWaitResponse.Location = new System.Drawing.Point(13, 77);
             this.btnCRAndWaitResponse.Name = "btnCRAndWaitResponse";
             this.btnCRAndWaitResponse.Size = new System.Drawing.Size(225, 23);
             this.btnCRAndWaitResponse.TabIndex = 6;
             this.btnCRAndWaitResponse.Text = "CR送信 -> CC待ち";
             this.btnCRAndWaitResponse.UseVisualStyleBackColor = true;
+            this.btnCRAndWaitResponse.Click += new System.EventHandler(this.btnCRAndWaitResponse_Click);
             // 
             // Form1
             // 
