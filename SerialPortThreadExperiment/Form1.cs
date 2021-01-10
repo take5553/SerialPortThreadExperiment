@@ -16,10 +16,13 @@ namespace SerialPortThreadExperiment
         public Form1()
         {
             InitializeComponent();
+            ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
         }
 
-        private void btnCommOpen_Click(object sender, EventArgs e)
+        private void BtnCommOpen_Click(object sender, EventArgs e)
         {
+            ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
             Comm1Open();
 
             // シリアルポートが開く前用のコントロールを無効化
@@ -31,6 +34,7 @@ namespace SerialPortThreadExperiment
 
         private void Comm1Open()
         {
+            ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
             serialPort1.BaudRate = 9600;
             serialPort1.Parity = Parity.Even;
             serialPort1.DataBits = 8;
@@ -47,11 +51,13 @@ namespace SerialPortThreadExperiment
             {
                 Console.WriteLine("Comm1Open Exception:" + ex.Message);
             }
-            
+
         }
 
-        private void btnCommClose_Click(object sender, EventArgs e)
+        private void BtnCommClose_Click(object sender, EventArgs e)
         {
+            ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
             serialPort1.Close();
 
             // シリアルポートが開く前用のコントロールを有効化
@@ -71,6 +77,8 @@ namespace SerialPortThreadExperiment
 
         private void OutCmd(string tcmd)
         {
+            ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
             if (serialPort1.IsOpen == false)
             {
                 return;
@@ -84,28 +92,36 @@ namespace SerialPortThreadExperiment
             {
                 Console.WriteLine("OutCmd Exception:" + ex.Message);
             }
-            
         }
 
-        private void btnSendCR_Click(object sender, EventArgs e)
+        private void BtnSendCR_Click(object sender, EventArgs e)
         {
+            ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
             OutCmd("CR");
         }
 
-        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void SerialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
+            ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
             string data = serialPort1.ReadLine();
             Response(data);
         }
 
         private void Response(string text)
         {
+            ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
             if (InvokeRequired)
             {
                 Invoke(new Action<string>(Response), text);
                 return;
             }
             lblReceivedText.Text += text + serialPort1.NewLine;
+        }
+
+        private void ShowThreadID(string method)
+        {
+            int id = System.Threading.Thread.CurrentThread.ManagedThreadId;
+            Console.WriteLine("ID : " + id + "(" + method + ")");
         }
     }
 }

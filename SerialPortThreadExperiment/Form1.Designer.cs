@@ -37,6 +37,7 @@ namespace SerialPortThreadExperiment
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.btnSendCR = new System.Windows.Forms.Button();
             this.lblReceivedText = new System.Windows.Forms.Label();
+            this.btnCRAndWaitResponse = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtCommNumber
@@ -64,7 +65,7 @@ namespace SerialPortThreadExperiment
             this.btnCommOpen.TabIndex = 2;
             this.btnCommOpen.Text = "OPEN";
             this.btnCommOpen.UseVisualStyleBackColor = true;
-            this.btnCommOpen.Click += new System.EventHandler(this.btnCommOpen_Click);
+            this.btnCommOpen.Click += new System.EventHandler(this.BtnCommOpen_Click);
             // 
             // btnCommClose
             // 
@@ -75,11 +76,11 @@ namespace SerialPortThreadExperiment
             this.btnCommClose.TabIndex = 3;
             this.btnCommClose.Text = "CLOSE";
             this.btnCommClose.UseVisualStyleBackColor = true;
-            this.btnCommClose.Click += new System.EventHandler(this.btnCommClose_Click);
+            this.btnCommClose.Click += new System.EventHandler(this.BtnCommClose_Click);
             // 
             // serialPort1
             // 
-            this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
+            this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.SerialPort1_DataReceived);
             // 
             // btnSendCR
             // 
@@ -89,7 +90,7 @@ namespace SerialPortThreadExperiment
             this.btnSendCR.TabIndex = 4;
             this.btnSendCR.Text = "CR送信";
             this.btnSendCR.UseVisualStyleBackColor = true;
-            this.btnSendCR.Click += new System.EventHandler(this.btnSendCR_Click);
+            this.btnSendCR.Click += new System.EventHandler(this.BtnSendCR_Click);
             // 
             // lblReceivedText
             // 
@@ -100,11 +101,21 @@ namespace SerialPortThreadExperiment
             this.lblReceivedText.Size = new System.Drawing.Size(396, 392);
             this.lblReceivedText.TabIndex = 5;
             // 
+            // btnCRAndWaitResponse
+            // 
+            this.btnCRAndWaitResponse.Location = new System.Drawing.Point(13, 77);
+            this.btnCRAndWaitResponse.Name = "btnCRAndWaitResponse";
+            this.btnCRAndWaitResponse.Size = new System.Drawing.Size(225, 23);
+            this.btnCRAndWaitResponse.TabIndex = 6;
+            this.btnCRAndWaitResponse.Text = "CR送信 -> CC待ち";
+            this.btnCRAndWaitResponse.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(672, 420);
+            this.Controls.Add(this.btnCRAndWaitResponse);
             this.Controls.Add(this.lblReceivedText);
             this.Controls.Add(this.btnSendCR);
             this.Controls.Add(this.btnCommClose);
@@ -128,6 +139,7 @@ namespace SerialPortThreadExperiment
         private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.Button btnSendCR;
         private System.Windows.Forms.Label lblReceivedText;
+        private System.Windows.Forms.Button btnCRAndWaitResponse;
     }
 }
 
