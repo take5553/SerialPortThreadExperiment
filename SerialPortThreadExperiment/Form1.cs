@@ -134,12 +134,12 @@ namespace SerialPortThreadExperiment
         private void btnCRAndWaitResponse_Click(object sender, EventArgs e)
         {
             ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
-            SendCRAndWaitResponse();
+            SendCRAndWaitResponse2();
         }
 
         private async void SendCRAndWaitResponse()
         {
-            ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
+            ShowThreadID("SendCRAndWait 開始");
             int t = 200;
             OutCmd("CR");
             do
@@ -155,7 +155,31 @@ namespace SerialPortThreadExperiment
                 return;
             }
             Console.WriteLine("Data Received: InpTxt = " + InpTxt + ", t = " + t);
-            ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
+            ShowThreadID("SendCRAndWait 終了");
+            lblReceivedText.Text += InpTxt + serialPort1.NewLine;
+            InpTxt = "";
+        }
+
+        private void SendCRAndWaitResponse2()
+        {
+            ShowThreadID("SendCRAndWait 開始");
+            int t = 20000000;
+            OutCmd("CR2");
+            do
+            {
+                Application.DoEvents();
+                t -= 1;
+            } while (t >= 0 && InpTxt == "");
+            if (t < 0)
+            {
+                Console.WriteLine("Failed Receiving: InpTxt = " + InpTxt + ", t = " + t);
+                ShowThreadID(System.Reflection.MethodBase.GetCurrentMethod().Name);
+                InpTxt = "";
+                return;
+            }
+            Console.WriteLine("Data Received: InpTxt = " + InpTxt + ", t = " + t);
+            ShowThreadID("SendCRAndWait 終了");
+            lblReceivedText.Text += InpTxt + serialPort1.NewLine;
             InpTxt = "";
         }
     }
